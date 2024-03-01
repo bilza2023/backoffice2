@@ -21,6 +21,7 @@ $:{
     // let sortedArray;
     
 function getTitle(question){
+    debugger;
     if (question.name && question.name !== ''){
         return `${question.name} `;
     }else {

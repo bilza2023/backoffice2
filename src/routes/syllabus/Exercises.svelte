@@ -1,34 +1,9 @@
 <script>
 //@ts-nocheck
-import removeDuplicates from "./fn/removeDuplicates.js";
-export let questions;
-export let selectedChapter;
 export let selectedEx;
-export let setEx;;
+export let setEx;
+export let exercise_bucket;
 
-let  allExercises = allEx();
-let  ex = removeDuplicates(allExercises);
-// let selectedEx = ex[0];
-setEx(ex[0]);
-// console.log('allExercises',ex);
-function allEx(){
- // debugger;
- const ex = [];
-    for (let i = 0; i < questions.length; i++) {
-        const question = questions[i];
-        if (question.chapter == selectedChapter){
-            ex.push(question.exercise);
-        }
-    }
-return ex;
-}
-
-$:{
-  selectedChapter;
-  allExercises = allEx();
-  ex = removeDuplicates(allExercises);
-  setEx(ex[0]);
-}
 </script>
 
 <div class="flex justify-center">
@@ -36,13 +11,17 @@ $:{
         Select Exercise
     </div>
 </div>
+
 <div class="flex justify-center w-full flex-wrap ">
-    {#if ex.length ==0}
-    <h1>No Exercise</h1>    
-    {:else}
-    {#each ex as e}
+
+{#if exercise_bucket.length > 0 }
+{#each  exercise_bucket  as e }
+    
     <button on:click={()=>setEx(e) }  class={`p-1 m-1 rounded-lg  px-2 ${selectedEx== e? 'bg-gray-400':'bg-gray-600' }`}>{e}</button>
-    {/each}
-    {/if}
+    
+{/each}
+{:else}
+<p class="p-1 m-1 rounded-lg  px-2 bg-gray-600">No Exercises</p>
+{/if}
 
 </div>

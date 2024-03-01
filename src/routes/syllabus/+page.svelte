@@ -9,6 +9,7 @@ import ExerciseQs from "./ExerciseQs.svelte";
 import Questions from "./questions/Questions.svelte";
 import Exercises from "./Exercises.svelte";
 import Summary from '$lib/appComp/Summary.svelte';
+import chapter_map from "./fn/chapter_map";
 // import getSyllabus from '$lib/appComp/getSyllabus';
 let tcode;
 /////////////////////////////////
@@ -16,6 +17,8 @@ let questions;
 let selectedEx ="1.1";
 let selectedChapter = 1;
 let chapterTotalQuestions = 0;
+let chapter_map_array=[];
+let exercise_bucket=[];
 
 $:  {
   if (questions){
@@ -31,18 +34,30 @@ let isAdmin = false;
 
 function setChapter(newChapter){
 selectedChapter = newChapter;
+setExBucket(selectedChapter);
+}
+
+function setExBucket(selectedChapter){
+  for (let i = 0; i < chapter_map_array.length; i++) {
+    const chapterObj = chapter_map_array[i];
+        if(chapterObj.chapter == selectedChapter){
+            exercise_bucket = chapterObj.exercises;
+            setEx(exercise_bucket[0]);
+            continue; 
+        }
+  } 
 }
 /////////////////-----on-mount
-function getUrl(question){
- return `/eqs?id=${question._id}`;
-} 
+// function getUrl(question){
+//  return `/eqs?id=${question._id}`;
+// } 
 
 onMount(async () => {
 try{
     // debugger;
     tcode = new URLSearchParams(location.search).get("tcode");
     let token = localStorage.getItem("token");
-    const resp = await fetch( `${BASE_URL}/be/syllabus` ,{
+    const resp = await fetch( `${BASE_URL}/tcode/syllabus` ,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -52,18 +67,21 @@ try{
     });
 
     if (resp){
+      debugger;
       const data = await resp.json();
-      questions = data.questions;
-      // console.log("questions",questions);
+      questions = data.items.questions; //the api return items
+      chapter_map_array = await chapter_map(questions);
+      // console.log("map",chapter_map_array);
+      setChapter(chapter_map_array[0].chapter);
       isLogin = checkToken();
-      isAdmin = checkAdminToken();
+      // isAdmin = checkAdminToken();
     }else {
      const data = await resp.json();
       toast.push(data.message);
     }
 
   } catch (e) {
-       toast.push('System error');
+       toast.push('System error',e);
   }      
 });
 
@@ -79,16 +97,16 @@ try{
 
 <Summary {questions} />
 <div class="p-4 m-1 border-2 border-white rounded-lg">
-<Dd {setChapter} {selectedChapter}/>
+<Dd {chapter_map_array} {setChapter} {selectedChapter}/>
   <br/>
-<Exercises  {questions} {selectedChapter} {selectedEx} {setEx} />
+<Exercises  {exercise_bucket}  {selectedEx} {setEx} />
 </div>
 <!-- <HdgWithIcon>{`Chapter Total: ${chapterTotalQuestions}`}</HdgWithIcon> -->
 <div class='flex justify-start text-xs p-1 m-1 '>
 {`Total Chapter Questions: ${chapterTotalQuestions}`}
 </div>
 
-<Questions {questions} {selectedEx} {getUrl} {isAdmin} {tcode}/>
+<Questions {questions} {selectedEx} {isAdmin} {tcode}/>
 
 <br/>
 {/if}
