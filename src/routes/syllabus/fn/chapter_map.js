@@ -1,7 +1,7 @@
 //@ts-nocheck
 
 export default async function chapter_map(questions) {
-    debugger; 
+    // debugger; 
     const chapter_map = [];
     // Create an object to store chapters and their exercises
     const unique_chapters = [];
@@ -17,7 +17,7 @@ export default async function chapter_map(questions) {
         chapter_map.push({chapter:chapter , exercises:[]});
     }
 //step-3
-debugger;
+// debugger;
 for (let i = 0; i < chapter_map.length; i++) {
     const chapter = chapter_map[i].chapter;
 

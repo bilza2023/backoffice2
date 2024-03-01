@@ -67,7 +67,7 @@ try{
     });
 
     if (resp){
-      debugger;
+      
       const data = await resp.json();
       questions = data.items.questions; //the api return items
       chapter_map_array = await chapter_map(questions);

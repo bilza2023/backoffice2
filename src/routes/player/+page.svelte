@@ -34,11 +34,14 @@ const resp = await fetch( `${BASE_URL}/tcode/read`, {
   });
 // 
   if(resp.ok){
-    const item = await resp.json();
-    slides = returnSlides.item.slides;
-  getStopTime(slides);
-  currentSlide = slides[0];
-
+    // Error in the api
+    const firstITem = await resp.json();
+    const item = firstITem.item;
+    const question = item.question;
+    slides = question.slides;
+    getStopTime(slides);
+    currentSlide = slides[0];
+    
 } else {
     throw new Error('Failed to load');}
   

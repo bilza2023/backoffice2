@@ -1,8 +1,8 @@
 <script>
   //@ts-nocheck
-  import { onMount } from '$lib/util';
+  import { onMount,BASE_URL } from '$lib/util';
   import Toolbar from './Toolbar.svelte';
-  import readSlides from '$lib/tdf/readSlides';
+  // import readSlides from '$lib/tdf/readSlides';
   import {Presentation,getNewSlide} from '$lib/Presentation';
   import saveFinal from './fn/saveFinal';
   import LeftPanel from './LeftPanel.svelte';
@@ -104,22 +104,35 @@ async function  addNew(slideType){
 //  debugger;
  id = new URLSearchParams(location.search).get("id");
  tcode = new URLSearchParams(location.search).get("tcode");
-  let returnSlides  = await readSlides(id,tcode);
-    try { 
- if (returnSlides){
-  //debugger;
-  item =  returnSlides.item;
-  slides = item.slides;
+ let token = localStorage.getItem("token");
+const resp = await fetch( `${BASE_URL}/tcode/read`, {
+    method: 'POST',
+      headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  },
+  body: JSON.stringify( {id , tcode} )
+  });
+// 
+  if(resp.ok){
+     //debugger;
+  const firstITem = await resp.json();
+  item = firstITem.item;   
+  const question = item.question;
+  slides = question.slides;
   filename = item.filename;
-  console.log("filename",filename);
+  // console.log("filename",filename);
   //I can use different tcode (different tables) for the same eq-player. the files should be in static/tcode/exercise/filename.mp3
   soundFile = tcode + '/' + item.exercise  + '/' + item.filename + '.mp3';
     if (slides.length > 0){
       currentSlideIndex = 0;
     }
-  }
-
-else {throw new Error('Failed to load');}
+    
+} else {
+    throw new Error('Failed to load');}
+  // let returnSlides  = await readSlides(id,tcode);
+    try { 
+ 
  } catch (error) {
       console.error(error);
     } finally {
