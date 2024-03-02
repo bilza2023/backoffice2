@@ -11,6 +11,8 @@ export default async function chapter_map(questions) {
             unique_chapters.push(question.chapter)
      }
     }
+    //===importantay
+    unique_chapters.sort((a, b) => a - b);
 //step=2
     for (let i = 0; i < unique_chapters.length; i++) {
         const chapter = unique_chapters[i];

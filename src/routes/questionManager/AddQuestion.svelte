@@ -9,7 +9,7 @@ let exercise ='1.1';
 let questionNo =1;
 let part=0;
 let name='';
-
+ 
 function convertToUrlFriendlyName(name) {
     const urlFriendlyName = name.replace(/\s+/g, '_');
     const sanitizedUrlFriendlyName = urlFriendlyName.replace(/[^\w\d_]/g, '');
@@ -28,19 +28,19 @@ name = convertToUrlFriendlyName(name);
 // debugger;
 //   let tcode = 'fbise' + classNo + 'math';
   let token = localStorage.getItem("token");
-    const response = await fetch( `${BASE_URL}/be/add_question` ,{
+    const response = await fetch( `${BASE_URL}/tcode/create` ,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ qData :{chapter, exercise, questionNo, part, name,tcode}} )
+      body: JSON.stringify({ tcode , question :{ board: "fbise" ,chapter, exercise, questionNo, part, name}} )
     });
 
     if (response.ok) {
         const data = await response.json();
-        // toast.push('Question Created');
-        toast.push(data.message);
+        toast.push('Question Created');
+        // toast.push(data.message);
     }else {
         const data = await response.json();
         toast.push(data.message)
@@ -55,6 +55,8 @@ name = convertToUrlFriendlyName(name);
 <h1 class='mx-auto'>Add Question</h1>
 
 <TcodeDd bind:tcode={tcode}/>
+
+
 <!--Chapter-->
 <div class='flex justify-around  border-2 border-gray-600 p-1 m-1 rounded-sm'>
     <div class='text-sm text-center border-2 border-yellow-700 rounded-md p-1 w-4/12'>Chapter</div>

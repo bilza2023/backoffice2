@@ -11,7 +11,6 @@ if (slides && slides.length > 0){
   updateSlideStartTimes(slides);
 }
 // stringify(slides);
-  const presentation = {slides ,status:item.status,questionType:item.questionType,_id:id};
   // const resp = await fetch( `${BASE_URL}/be/update`, {
   //   method: 'POST',
   //     headers: {
@@ -21,7 +20,7 @@ if (slides && slides.length > 0){
   // body: JSON.stringify( {presentation,tcode} ) 
   // });
   // debugger;
-  const resp = await ajaxPost(`${BASE_URL}/be/update`,{presentation,tcode})
+  const resp = await ajaxPost(`${BASE_URL}/tcode/update`,{tcode , question:{slides ,status:item.status,questionType:item.questionType,_id:id}})
   if(resp.ok){
     toast.push('saved');}
     else {toast.push('failed to saved');

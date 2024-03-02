@@ -14,7 +14,7 @@ async function deleteQuestion(){
 }
   // let tcode = 'fbise' + classNo + 'math';
   let token = localStorage.getItem("token");
-    const response = await fetch( `${BASE_URL}/be/delete_question` ,{
+    const response = await fetch( `${BASE_URL}/tcode/delete` ,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -22,12 +22,12 @@ async function deleteQuestion(){
       },
       body: JSON.stringify({ id,tcode } )
     });
-
+debugger;
     if (response.ok) {
-        // const data = await response.json();
+        const data = await response.json();
         toast.push('Question deleted');
         id='';
-    }else {
+    }else  {
         const data = await response.json();
         toast.push(data.message)
     }
